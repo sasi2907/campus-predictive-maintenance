@@ -14,7 +14,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://campus-predictive-maintenance-api.onrender.com/api";
 
 const PRIORITY_CLASSES = {
   Critical: "record-priority-critical",
