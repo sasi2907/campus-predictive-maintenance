@@ -8,7 +8,7 @@ import {
   MapPin,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/facilities-summary";
+const API_URL = "https://campus-predictive-maintenance-api.onrender.com/api/facilities-summary";
 
 function SummaryCard({ title, icon: Icon, items, color }) {
   const total = items.reduce((sum, item) => sum + item.count, 0);
@@ -148,7 +148,7 @@ export default function Facilities() {
           role="alert"
           className="facilities-message facilities-error"
         >
-          {error} Check that the Flask backend is running on port 5000.
+          {error} Check your connection to the deployed Flask API.
         </div>
       )}
 

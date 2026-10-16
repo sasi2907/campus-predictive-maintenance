@@ -16,7 +16,7 @@ import {
   CalendarDays,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/analytics";
+const API_URL = "https://campus-predictive-maintenance-api.onrender.com/api/analytics";
 
 const CHARTS = [
   {
