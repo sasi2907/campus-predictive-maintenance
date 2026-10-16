@@ -14,7 +14,7 @@ import {
 import { getMaintenanceLogs } from "../services/maintenanceService";
 import MaintenanceRecordDetails from "./MaintenanceRecordDetails";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://campus-predictive-maintenance-api.onrender.com/api";
 
 const SEVERITY_CLASSES = {
   High: "maintenance-severity-high",

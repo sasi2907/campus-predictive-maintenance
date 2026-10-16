@@ -8,7 +8,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/priority-overview";
+const API_URL = "https://campus-predictive-maintenance-api.onrender.com/api/priority-overview";
 
 const PRIORITY_CLASSES = {
   Critical: "priority-overview-badge-critical",
