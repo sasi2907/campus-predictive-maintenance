@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import {
   X,
@@ -13,8 +14,7 @@ import {
   Save,
   CheckCircle2,
 } from "lucide-react";
-
-const API_BASE_URL = "https://campus-predictive-maintenance-api.onrender.com/api";
+import { API_BASE_URL, apiFetch } from "../services/api";
 
 const PRIORITY_CLASSES = {
   Critical: "record-priority-critical",
@@ -81,30 +81,32 @@ export default function MaintenanceRecordDetails({
 
       try {
         const [recordResponse, workflowResponse] = await Promise.all([
-          fetch(
+          apiFetch(
             `${API_BASE_URL}/maintenance-logs/${encodeURIComponent(logId)}`,
             { signal: controller.signal }
           ),
-          fetch(
+          apiFetch(
             `${API_BASE_URL}/maintenance-actions/${encodeURIComponent(logId)}`,
             { signal: controller.signal }
           ),
         ]);
 
-        const recordData = await recordResponse.json();
-        const workflowData = await workflowResponse.json();
+        const recordData = await recordResponse.json().catch(() => null);
+        const workflowData = await workflowResponse.json().catch(() => null);
 
         if (!recordResponse.ok) {
           throw new Error(
-            recordData.error || "Unable to load the maintenance record."
+            recordData?.error || "Unable to load the maintenance record."
           );
         }
 
         if (!workflowResponse.ok) {
           throw new Error(
-            workflowData.error || "Unable to load workflow information."
+            workflowData?.error || "Unable to load workflow information."
           );
         }
+
+        if (controller.signal.aborted) return;
 
         setRecord(recordData.record);
         setWorkflow(workflowData);
@@ -113,7 +115,7 @@ export default function MaintenanceRecordDetails({
         setAssignedTeam(workflowData.assigned_team || "");
         setResolutionNotes(workflowData.resolution_notes || "");
       } catch (err) {
-        if (err.name !== "AbortError") {
+        if (err.name !== "AbortError" && !controller.signal.aborted) {
           setError(
             err.message || "Could not connect to the maintenance API."
           );
@@ -138,7 +140,7 @@ export default function MaintenanceRecordDetails({
     setSaveMessage("");
 
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${API_BASE_URL}/maintenance-actions/${encodeURIComponent(logId)}`,
         {
           method: "PUT",
@@ -153,10 +155,12 @@ export default function MaintenanceRecordDetails({
         }
       );
 
-      const data = await response.json();
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data.error || "Unable to save workflow changes.");
+        throw new Error(
+          data?.error || "Unable to save workflow changes."
+        );
       }
 
       setWorkflow(data.action);
@@ -288,7 +292,9 @@ export default function MaintenanceRecordDetails({
                     <strong>{record.Severity_Level}</strong>
                   </span>
 
-                  <span className={`record-priority-badge ${priorityClass}`}>
+                  <span
+                    className={`record-priority-badge ${priorityClass}`}
+                  >
                     {record.priority} priority
                   </span>
                 </div>

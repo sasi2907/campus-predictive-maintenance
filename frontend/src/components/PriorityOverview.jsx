@@ -7,8 +7,9 @@ import {
   ClipboardList,
   RefreshCw,
 } from "lucide-react";
+import { API_BASE_URL, apiFetch } from "../services/api";
 
-const API_URL = "https://campus-predictive-maintenance-api.onrender.com/api/priority-overview";
+const API_URL = `${API_BASE_URL}/priority-overview`;
 
 const PRIORITY_CLASSES = {
   Critical: "priority-overview-badge-critical",
@@ -99,13 +100,15 @@ export default function PriorityOverview() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(API_URL);
+      const response = await apiFetch(API_URL);
+      const result = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error("Failed to load the priority overview.");
+        throw new Error(
+          result?.error || "Failed to load the priority overview."
+        );
       }
 
-      const result = await response.json();
       setData(result);
     } catch (err) {
       setError(
@@ -303,7 +306,8 @@ export default function PriorityOverview() {
 
               <div className="priority-overview-location-list">
                 {locations.map((item) => {
-                  const count = Number(item.high_severity_count) || 0;
+                  const count =
+                    Number(item.high_severity_count) || 0;
                   const percentage = (count / maxLocationCount) * 100;
 
                   return (

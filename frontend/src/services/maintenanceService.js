@@ -1,5 +1,5 @@
 
-const API_BASE_URL = "https://campus-predictive-maintenance-api.onrender.com/api";
+import { API_BASE_URL, apiFetch } from "./api";
 
 export async function getMaintenanceLogs({
   search = "",
@@ -20,7 +20,7 @@ export async function getMaintenanceLogs({
     limit: String(limit),
   });
 
-  const response = await fetch(
+  const response = await apiFetch(
     `${API_BASE_URL}/maintenance-logs?${params.toString()}`
   );
 

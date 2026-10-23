@@ -15,8 +15,9 @@ import {
   Building2,
   CalendarDays,
 } from "lucide-react";
+import { API_BASE_URL, apiFetch } from "../services/api";
 
-const API_URL = "https://campus-predictive-maintenance-api.onrender.com/api/analytics";
+const API_URL = `${API_BASE_URL}/analytics`;
 
 const CHARTS = [
   {
@@ -138,13 +139,15 @@ export default function Analytics() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(API_URL);
+        const response = await apiFetch(API_URL);
+
+        const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-          throw new Error("Failed to load analytics data.");
+          throw new Error(
+            data?.error || "Failed to load analytics data."
+          );
         }
-
-        const data = await response.json();
 
         if (!cancelled) {
           setAnalytics(data);
@@ -199,10 +202,7 @@ export default function Analytics() {
       )}
 
       {error && (
-        <div
-          role="alert"
-          className="analytics-message analytics-error"
-        >
+        <div role="alert" className="analytics-message analytics-error">
           {error} Check that Flask is running and the /api/analytics
           endpoint returns JSON.
         </div>

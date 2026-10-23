@@ -7,8 +7,9 @@ import {
   ShieldCheck,
   MapPin,
 } from "lucide-react";
+import { API_BASE_URL, apiFetch } from "../services/api";
 
-const API_URL = "https://campus-predictive-maintenance-api.onrender.com/api/facilities-summary";
+const API_URL = `${API_BASE_URL}/facilities-summary`;
 
 function SummaryCard({ title, icon: Icon, items, color }) {
   const total = items.reduce((sum, item) => sum + item.count, 0);
@@ -83,13 +84,16 @@ export default function Facilities() {
 
     async function loadSummary() {
       try {
-        const response = await fetch(API_URL);
+        setError("");
+
+        const response = await apiFetch(API_URL);
+        const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-          throw new Error("Unable to load facility summaries.");
+          throw new Error(
+            data?.error || "Unable to load facility summaries."
+          );
         }
-
-        const data = await response.json();
 
         if (!cancelled) {
           setSummary(data);

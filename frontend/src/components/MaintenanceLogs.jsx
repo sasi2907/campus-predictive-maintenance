@@ -11,10 +11,9 @@ import {
   Eye,
 } from "lucide-react";
 
+import { API_BASE_URL, apiFetch } from "../services/api";
 import { getMaintenanceLogs } from "../services/maintenanceService";
 import MaintenanceRecordDetails from "./MaintenanceRecordDetails";
-
-const API_BASE_URL = "https://campus-predictive-maintenance-api.onrender.com/api";
 
 const SEVERITY_CLASSES = {
   High: "maintenance-severity-high",
@@ -100,7 +99,7 @@ export default function MaintenanceLogs({ onWorkflowSaved }) {
         const results = await Promise.all(
           records.map(async (record) => {
             try {
-              const response = await fetch(
+              const response = await apiFetch(
                 `${API_BASE_URL}/maintenance-actions/${encodeURIComponent(
                   record.Log_ID
                 )}`
@@ -217,6 +216,7 @@ export default function MaintenanceLogs({ onWorkflowSaved }) {
             <p className="maintenance-record-count-label">
               Matching records
             </p>
+
             <p className="maintenance-record-count-value">
               {pagination?.total_records ?? "—"}
             </p>
@@ -308,6 +308,7 @@ export default function MaintenanceLogs({ onWorkflowSaved }) {
               <p className="maintenance-logs-error-title">
                 Could not load maintenance records
               </p>
+
               <p className="maintenance-logs-error-description">
                 {error}
               </p>
@@ -335,11 +336,15 @@ export default function MaintenanceLogs({ onWorkflowSaved }) {
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan={9} className="maintenance-table-message-cell">
+                    <td
+                      colSpan={9}
+                      className="maintenance-table-message-cell"
+                    >
                       <LoaderCircle
                         size={22}
                         className="maintenance-loading-icon"
                       />
+
                       <p className="maintenance-table-message">
                         Loading maintenance records...
                       </p>
@@ -378,9 +383,11 @@ export default function MaintenanceLogs({ onWorkflowSaved }) {
 
                         <td>{record.Location}</td>
                         <td>{record.Facility_Type}</td>
+
                         <td className="maintenance-cell-issue">
                           {record.Issue_Type}
                         </td>
+
                         <td>{record.Day_of_Week}</td>
                         <td>{record.Footfall}</td>
 
@@ -415,18 +422,20 @@ export default function MaintenanceLogs({ onWorkflowSaved }) {
                     );
                   })}
 
-                {!loading && !error && data?.records?.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={9}
-                      className="maintenance-table-message-cell"
-                    >
-                      <p className="maintenance-table-message">
-                        No maintenance records match your filters.
-                      </p>
-                    </td>
-                  </tr>
-                )}
+                {!loading &&
+                  !error &&
+                  data?.records?.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={9}
+                        className="maintenance-table-message-cell"
+                      >
+                        <p className="maintenance-table-message">
+                          No maintenance records match your filters.
+                        </p>
+                      </td>
+                    </tr>
+                  )}
               </tbody>
             </table>
           </div>

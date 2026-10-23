@@ -1,11 +1,11 @@
 
-const API_BASE_URL = "https://campus-predictive-maintenance-api.onrender.com/api";
+import { API_BASE_URL, apiFetch } from "./api";
 
 export async function predictFacilityRisk(formData) {
   let response;
 
   try {
-    response = await fetch(`${API_BASE_URL}/predict`, {
+    response = await apiFetch(`${API_BASE_URL}/predict`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
