@@ -343,7 +343,6 @@ Potential improvements include:
 This project is intended for educational and demonstration purposes. Its predictions and historical priority rankings should not be treated as verified real-world safety assessments or as substitutes for professional facility inspections.
 
 ---
-
 **Project:** Campus Predictive Maintenance System  
 **Frontend:** React and Vite  
 **Backend:** Python and Flask  
