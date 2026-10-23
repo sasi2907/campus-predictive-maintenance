@@ -1,4 +1,3 @@
-
 const PRIORITY_CLASSES = {
   Critical: "prediction-priority-critical",
   High: "prediction-priority-high",

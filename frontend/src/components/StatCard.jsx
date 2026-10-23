@@ -1,4 +1,3 @@
-
 export default function StatCard({ label, value, description, icon: Icon }) {
   return (
     <article className="stat-card">
